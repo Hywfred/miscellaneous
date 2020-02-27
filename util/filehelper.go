@@ -28,3 +28,20 @@ func FindFile(f string) (p string, err error) {
 	}
 	return
 }
+
+// 在当前路径及其子目录下寻找指定目录
+func FindDir(dir string) (d string, err error) {
+    // 获取当前路径
+	curDir, err := os.Getwd()
+	CheckErr(err)
+	// 寻找 dir 路径
+	err = filepath.Walk(curDir, func(p string, i os.FileInfo, err error) error {
+		if i.IsDir() && filepath.Base(p) == dir {
+			d = p
+			err = nil
+		}
+		return err
+	})
+	CheckErr(err)
+	return
+}
